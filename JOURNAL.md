@@ -21,3 +21,5 @@ dont worry abt the pic , ik i draw worse than even orphy lol
 ---
 
 thts all for this commit 
+
+ok next commit , broke the main.rs into parts done , i am goin to sleep now .
