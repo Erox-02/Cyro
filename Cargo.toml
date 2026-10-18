@@ -1,0 +1,9 @@
+[package]
+name = "Cyro"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+eframe = "0.33"
+image = { version = "0.25", features = ["png", "jpeg"] }
+rfd = "0.15"
