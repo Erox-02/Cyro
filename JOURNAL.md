@@ -89,3 +89,11 @@ lol , but rest works . wait , idk if rest works <T_T>
 anyways , lemme fix the super prob 
 
 ahh it works now but before upscalling , ik there were a lil bit ai , like the drag mode(lowkey i dont get those things) but rest was mine , so why cant i find the default struct i made to set scaling on 4 ?
+
+![](assets/hn.png)
+
+finally found this brat 
+
+![](assets/02-up.png)
+
+ohhh now it upscales , js needa wait a lot , i think i needa add a progress bar 
