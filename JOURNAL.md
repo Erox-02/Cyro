@@ -23,3 +23,11 @@ dont worry abt the pic , ik i draw worse than even orphy lol
 thts all for this commit 
 
 ok next commit , broke the main.rs into parts done , i am goin to sleep now .
+
+# oct 19
+
+ok started with the ui.rs today , added 2 files , crp and esrgan , also ui.rs needs a really lot of work , but i suck in ui so what can i do now? maybe ai? but thts against my moto , then how abt copy frm other open source ? nah others arent tht much obbsessed with rust like me , ahhhhh! 
+
+anyways this push contains a very basic version by deepseek (i cant do frontend frm scratch yk ) , the crp function is shit , i will fix tht but i suck in ui ah!
+
+anyways did most of the work myself so shldnt be a prob , also the crop mode is default for now lol 
