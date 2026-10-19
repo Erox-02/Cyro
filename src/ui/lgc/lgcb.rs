@@ -8,12 +8,17 @@ impl Cyro {
         egui::TopBottomPanel::top("toolbar").show(ctx, |ui| {
             let action = bar::show(ui, self.crop_mode);
             self.handle_action(action, ctx);
+            if !self.crop_mode && self.image.is_some() {
+                if ui.button("Upscale").clicked() {
+                    logd::esrgan_current(self, ctx);
+                }
+            }
         });
 
         egui::CentralPanel::default().show(ctx, |ui| {
             if self.image.is_none() {
                 ui.centered_and_justified(|ui| {
-                    ui.label("CYRO — not cryo\n\nOpen an image to begin.");
+                    ui.label("CYRO — not cryo\n\nopen an image to begin.");
                 });
                 return;
             }

@@ -20,7 +20,7 @@ pub fn show(ui: &mut egui::Ui, crop_mode: bool) -> BarAction {
         ui.separator();
 
         if crop_mode {
-            if ui.button("Apply crop").clicked() {
+            if ui.button("apply crop").clicked() {
                 action = BarAction::ApplyCrop;
             }
 

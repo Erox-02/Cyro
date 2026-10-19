@@ -78,3 +78,14 @@ ok fixed the bugs also named the buttons with the 1st letter in capital like app
 
 also after a lot of work i reakized splitting is a part of my hobby so i will split everything buhahahah , anyways the igc and ui were same file onve  `<skull emoji>` holy its 5 hrs today already???? imma gonna grind , i am on a so called family vacation where youre forced to tag so no way imma gonna waste this free time .
 
+okk back after a 2 hrs break , i think now imma gonna integrate esrgan? yeah probably esrgan 
+
+oh started the esrgan , i am js executing commands on terminal , no actual thing and after getting builied by rust a bit got this 
+
+![](assets/buggg.png)
+
+lol , but rest works . wait , idk if rest works <T_T> 
+
+anyways , lemme fix the super prob 
+
+ahh it works now but before upscalling , ik there were a lil bit ai , like the drag mode(lowkey i dont get those things) but rest was mine , so why cant i find the default struct i made to set scaling on 4 ?

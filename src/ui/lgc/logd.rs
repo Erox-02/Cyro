@@ -118,5 +118,56 @@ pub(super) fn cancel_crop(app: &mut Cyro) {
     app.crop_mode = false;
     app.drag_mode = None;
     app.crop = crate::crp::Crp::default();
-    app.status = "Crop cancelled.".into();
+    app.status = "crop cancelled.".into();
+}
+
+pub(super) fn esrgan_current(app: &mut Cyro, ctx: &egui::Context) {
+    let Some(source) = app.image.as_ref() else {
+        return;
+    };
+
+    let Some(output) = rfd::FileDialog::new()
+        .add_filter("png image", &["png"])
+        .set_file_name("upscaled.png")
+        .save_file()
+    else {
+        return;
+    };
+
+    let input = std::env::temp_dir().join("cyroin.png");
+
+    if let Err(err) = source.save_with_format(&input, image::ImageFormat::Png) {
+        app.status = format!("could not prepare image ++=> {err}");
+        return;
+    }
+
+    app.status = "upscaling.oO0".into();
+
+    let result = crate::esrgan::upscale(
+        &input,
+        &output,
+        app.esrgan_scale,
+        app.esrgan_model,
+    );
+
+    let _ = std::fs::remove_file(&input);
+
+    match result {
+        Ok(path) => match image::open(&path) {
+            Ok(upscaled) => {
+                let (width, height) = (upscaled.width(), upscaled.height());
+
+                app.image = Some(upscaled);
+                app.crop_mode = false;
+                app.drag_mode = None;
+                app.crop = crate::crp::Crp::default();
+
+                refresh_texture(app, ctx);
+
+                app.status = format!("upscaled to {width} x {height} px");
+            }
+            Err(err) => app.status = format!("cldnt not open output: {err}"),
+        },
+        Err(err) => app.status = format!("esrgan failed ++=> {err}"),
+    }
 }

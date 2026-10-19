@@ -1,6 +1,7 @@
 mod ui;
 mod crp;
 mod img_wrk;
+mod esrgan;
 mod bak;
 
 fn main() -> eframe::Result<()> {
