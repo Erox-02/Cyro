@@ -70,3 +70,11 @@ and now it works pretty good , but but theres a prob , the last lgc(logic).rs is
 
 anyways , fixed the probs , now i think esrgan will pull the rest repo , and i dont have any else feature in mind .
 
+ok done , splitted the lgc.rs , it took me a lot of time , and now wow errs , i am cursed 
+
+ok fixed the bugs also named the buttons with the 1st letter in capital like apply => Apply as it looks better (does it actually? well kind of for me it looks normal)
+
+![](assets/02_v2.png)
+
+also after a lot of work i reakized splitting is a part of my hobby so i will split everything buhahahah , anyways the igc and ui were same file onve  `<skull emoji>` holy its 5 hrs today already???? imma gonna grind , i am on a so called family vacation where youre forced to tag so no way imma gonna waste this free time .
+
