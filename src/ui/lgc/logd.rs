@@ -3,7 +3,7 @@ use eframe::egui;
 use super::lgca::Cyro;
 
 pub(super) fn refresh_texture(app: &mut Cyro, ctx: &egui::Context) {
-    let Some(image) = &app.image else {
+    let Some(image) = &app.img else {
         app.texture = None;
         return;
     };
@@ -30,28 +30,28 @@ pub(super) fn open_image(app: &mut Cyro, ctx: &egui::Context) {
 
     match image::open(&path) {
         Ok(image) => {
-            app.image = Some(image);
+            app.img = Some(image);
             refresh_texture(app, ctx);
-            app.crop = crate::crp::Crp::default();
-            app.crop_mode = false;
-            app.drag_mode = None;
+            app.crp = crate::crp::Crp::default();
+            app.crp_mde = false;
+            app.drg_mde = None;
             app.status = format!("opened => {}", path.display());
         }
         Err(err) => {
-            app.status = format!("Could not open image => {err}");
+            app.status = format!("couldnt open image => {err}");
         }
     }
 }
 
 pub(super) fn export_image(app: &mut Cyro) {
-    let Some(image) = &app.image else {
-        app.status = "No image to export.".into();
+    let Some(image) = &app.img else {
+        app.status = "no image to export.".into();
         return;
     };
 
     let Some(path) = rfd::FileDialog::new()
-        .add_filter("PNG image", &["png"])
-        .set_file_name("export.png")
+        .add_filter("png image", &["png"])
+        .set_file_name("exprt.png")
         .save_file()
     else {
         return;
@@ -64,12 +64,12 @@ pub(super) fn export_image(app: &mut Cyro) {
 
     match image.save_with_format(&path, image::ImageFormat::Png) {
         Ok(()) => app.status = format!("Exported => {}", path.display()),
-        Err(err) => app.status = format!("Export failed => {err}"),
+        Err(err) => app.status = format!("export failed => {err}"),
     }
 }
 
 pub(super) fn start_crop(app: &mut Cyro) {
-    let Some(image) = &app.image else {
+    let Some(image) = &app.img else {
         app.status = "open an image first.".into();
         return;
     };
@@ -79,21 +79,21 @@ pub(super) fn start_crop(app: &mut Cyro) {
     let margin_x = (width / 20).min(width.saturating_sub(1));
     let margin_y = (height / 20).min(height.saturating_sub(1));
 
-    app.crop = crate::crp::Crp {
+    app.crp = crate::crp::Crp {
         x: margin_x,
         y: margin_y,
         width: width.saturating_sub(2 * margin_x).max(1),
         height: height.saturating_sub(2 * margin_y).max(1),
     };
 
-    app.crop_mode = true;
-    app.drag_mode = None;
-    app.status = "drag the white handles to crop.".into();
+    app.crp_mde = true;
+    app.drg_mde = None;
+    app.status = "drag the white lines to crop.".into();
 }
 
 pub(super) fn apply_crop(app: &mut Cyro, ctx: &egui::Context) {
-    let result = match &app.image {
-        Some(image) => app.crop.crp_img(image),
+    let result = match &app.img {
+        Some(image) => app.crp.crp_img(image),
         None => {
             app.status = "no image loaded.".into();
             return;
@@ -103,21 +103,21 @@ pub(super) fn apply_crop(app: &mut Cyro, ctx: &egui::Context) {
     match result {
         Ok(cropped) => {
             let (width, height) = (cropped.width(), cropped.height());
-            app.image = Some(cropped);
-            app.crop_mode = false;
-            app.drag_mode = None;
-            app.crop = crate::crp::Crp::default();
+            app.img = Some(cropped);
+            app.crp_mde = false;
+            app.drg_mde = None;
+            app.crp = crate::crp::Crp::default();
             refresh_texture(app, ctx);
-            app.status = format!("Cropped => {width} × {height} pixels");
+            app.status = format!("Cropped => {width} x {height} pixels");
         }
-        Err(err) => app.status = format!("Crop failed => {err}"),
+        Err(err) => app.status = format!("crop failed => {err}"),
     }
 }
 
 pub(super) fn cancel_crop(app: &mut Cyro) {
-    app.crop_mode = false;
-    app.drag_mode = None;
-    app.crop = crate::crp::Crp::default();
+    app.crp_mde = false;
+    app.drg_mde = None;
+    app.crp = crate::crp::Crp::default();
     app.status = "crop cancelled.".into();
 }
 
@@ -146,8 +146,8 @@ pub(super) fn esrgan_current(app: &mut Cyro, ctx: &egui::Context) {
     let result = crate::esrgan::upscale(
         &input,
         &output,
-        app.esrgan_scale,
-        app.esrgan_model,
+        app.esr_scle,
+        app.esr_mdl,
     );
 
     let _ = std::fs::remove_file(&input);
@@ -157,10 +157,10 @@ pub(super) fn esrgan_current(app: &mut Cyro, ctx: &egui::Context) {
             Ok(upscaled) => {
                 let (width, height) = (upscaled.width(), upscaled.height());
 
-                app.image = Some(upscaled);
-                app.crop_mode = false;
-                app.drag_mode = None;
-                app.crop = crate::crp::Crp::default();
+                app.img = Some(upscaled);
+                app.crp_mde = false;
+                app.drg_mde = None;
+                app.crp = crate::crp::Crp::default();
 
                 refresh_texture(app, ctx);
 

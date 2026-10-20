@@ -18,31 +18,37 @@ pub(super) enum Dragmd {
 }
 
 pub struct Cyro {
-    pub(super) image: Option<DynamicImage>,
+    pub(super) img: Option<DynamicImage>,
     pub(super) texture: Option<egui::TextureHandle>,
     pub(super) status: String,
-    pub(super) crop: Crp,
-    pub(super) crop_mode: bool,
-    pub(super) esrgan_scale: u8,
-    pub(super) esrgan_model: crate::esrgan::Model,
-    pub(super) drag_mode: Option<Dragmd>,
-    pub(super) drag_anchor: egui::Pos2,
-    pub(super) drag_initial: Crp,
+    pub(super) crp: Crp,
+    pub(super) crp_mde: bool,
+    pub(super) esr_scle: u8,
+    pub(super) esr_mdl: crate::esrgan::Model,
+    pub(super) drg_mde: Option<Dragmd>,
+    pub(super) drg_anc: egui::Pos2,
+    pub(super) drg_init: Crp,
+    pub(super) esr_run: bool,
+    pub(super) esr_rx: Option<
+        std::sync::mpsc::Receiver<Result<std::path::PathBuf, String>>
+>,
 }
 
 impl Default for Cyro {
     fn default() -> Self {
         Self {
-            image: None,
+            img: None,
             texture: None,
             status: "Open an image to begin.".into(),
-            crop: Crp::default(),
-            crop_mode: false,
-            drag_mode: None,
-            drag_anchor: egui::Pos2::ZERO,
-            drag_initial: Crp::default(),
-            esrgan_scale: 4,
-            esrgan_model: crate::esrgan::Model::General,
+            crp: Crp::default(),
+            crp_mde: false,
+            drg_mde: None,
+            drg_anc: egui::Pos2::ZERO,
+            drg_init: Crp::default(),
+            esr_scle: 4,
+            esr_mdl: crate::esrgan::Model::General,
+            esr_run: false,
+            esr_rx: None,
         }
     }
 }

@@ -13,15 +13,15 @@ impl Cyro {
     ) -> egui::Rect {
         egui::Rect::from_min_max(
             Self::pixel_to_screen(
-                egui::pos2(self.crop.x as f32, self.crop.y as f32),
+                egui::pos2(self.crp.x as f32, self.crp.y as f32),
                 image_rect,
                 width,
                 height,
             ),
             Self::pixel_to_screen(
                 egui::pos2(
-                    (self.crop.x + self.crop.width) as f32,
-                    (self.crop.y + self.crop.height) as f32,
+                    (self.crp.x + self.crp.width) as f32,
+                    (self.crp.y + self.crp.height) as f32,
                 ),
                 image_rect,
                 width,
@@ -90,21 +90,21 @@ impl Cyro {
         }
 
         let point = Self::screen_to_pixel(pointer, rect, width, height);
-        let dx = point.x - self.drag_anchor.x;
-        let dy = point.y - self.drag_anchor.y;
-        let old = self.drag_initial;
+        let dx = point.x - self.drg_anc.x;
+        let dy = point.y - self.drg_anc.y;
+        let old = self.drg_init;
 
         let mut left = old.x as f32;
         let mut top = old.y as f32;
         let mut right = (old.x + old.width) as f32;
         let mut bottom = (old.y + old.height) as f32;
 
-        match self.drag_mode {
+        match self.drg_mde {
             Some(Dragmd::New) => {
-                left = self.drag_anchor.x.min(point.x);
-                top = self.drag_anchor.y.min(point.y);
-                right = self.drag_anchor.x.max(point.x);
-                bottom = self.drag_anchor.y.max(point.y);
+                left = self.drg_anc.x.min(point.x);
+                top = self.drg_anc.y.min(point.y);
+                right = self.drg_anc.x.max(point.x);
+                bottom = self.drg_anc.y.max(point.y);
             }
             Some(Dragmd::Move) => {
                 let w = right - left;
@@ -120,7 +120,7 @@ impl Cyro {
             _ => {}
         }
 
-        match self.drag_mode {
+        match self.drg_mde {
             Some(Dragmd::Right | Dragmd::TopRight | Dragmd::BottomRight) => {
                 right = (old.x as f32 + old.width as f32 + dx)
                     .clamp(left + 1.0, width as f32);
@@ -128,14 +128,14 @@ impl Cyro {
             _ => {}
         }
 
-        match self.drag_mode {
+        match self.drg_mde {
             Some(Dragmd::Top | Dragmd::TopLeft | Dragmd::TopRight) => {
                 top = (old.y as f32 + dy).clamp(0.0, bottom - 1.0);
             }
             _ => {}
         }
 
-        match self.drag_mode {
+        match self.drg_mde {
             Some(Dragmd::Bottom | Dragmd::BottomLeft | Dragmd::BottomRight) => {
                 bottom = (old.y as f32 + old.height as f32 + dy)
                     .clamp(top + 1.0, height as f32);
@@ -153,7 +153,7 @@ impl Cyro {
         let r = right.ceil().min(width as f32) as u32;
         let b = bottom.ceil().min(height as f32) as u32;
 
-        self.crop = Crp {
+        self.crp = Crp {
             x,
             y,
             width: r.saturating_sub(x),

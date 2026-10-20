@@ -5,10 +5,13 @@ use super::logd;
 
 impl Cyro {
     pub(super) fn show_ui(&mut self, ctx: &egui::Context) {
+        logd::poll_esrgan(self, ctx);
+
         egui::TopBottomPanel::top("toolbar").show(ctx, |ui| {
-            let action = bar::show(ui, self.crop_mode);
+            let action = bar::show(ui, self.crp_mde);
             self.handle_action(action, ctx);
-            if !self.crop_mode && self.image.is_some() {
+
+            if !self.crp_mde && self.img.is_some() && !self.esr_run {
                 if ui.button("Upscale").clicked() {
                     logd::esrgan_current(self, ctx);
                 }
@@ -16,7 +19,7 @@ impl Cyro {
         });
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            if self.image.is_none() {
+            if self.img.is_none() {
                 ui.centered_and_justified(|ui| {
                     ui.label("CYRO — not cryo\n\nopen an image to begin.");
                 });
@@ -24,7 +27,7 @@ impl Cyro {
             }
 
             let (width, height) = self
-                .image
+                .img
                 .as_ref()
                 .map(|img| (img.width(), img.height()))
                 .unwrap_or((0, 0));
@@ -32,8 +35,8 @@ impl Cyro {
             let image_rect = bkgnd::show(
                 ui,
                 self.texture.as_ref(),
-                self.crop_mode,
-                self.crop,
+                self.crp_mde,
+                self.crp,
                 width,
                 height,
             );
@@ -42,7 +45,7 @@ impl Cyro {
                 return;
             };
 
-            if !self.crop_mode {
+            if !self.crp_mde {
                 return;
             }
 
@@ -56,15 +59,15 @@ impl Cyro {
                 if let Some(pointer) = response.interact_pointer_pos() {
                     let crop_rect = self.crop_screen_rect(image_rect, width, height);
 
-                    self.drag_mode = Some(if crop_rect.contains(pointer) {
+                    self.drg_mde = Some(if crop_rect.contains(pointer) {
                         Self::hit_test(pointer, crop_rect)
                     } else {
                         Dragmd::New
                     });
 
-                    self.drag_anchor =
+                    self.drg_anc =
                         Self::screen_to_pixel(pointer, image_rect, width, height);
-                    self.drag_initial = self.crop;
+                    self.drg_init = self.crp;
                 }
             }
 
@@ -75,7 +78,7 @@ impl Cyro {
             }
 
             if response.drag_stopped() {
-                self.drag_mode = None;
+                self.drg_mde = None;
             }
         });
 
@@ -83,11 +86,30 @@ impl Cyro {
             ui.horizontal(|ui| {
                 ui.label(&self.status);
 
-                if self.crop_mode {
+                if self.crp_mde {
                     ui.separator();
-                    ui.label(format!("{} × {} px", self.crop.width, self.crop.height));
+                    ui.label(format!("{} x {} px", self.crp.width, self.crp.height));
+                }
+
+                if self.esr_run {
+                    ui.separator();
+                    ui.label(
+                        egui::RichText::new(
+                            "upscaling your img .oO0.oO0.oO0 , hold your horses ",
+                        )
+                        .small()
+                        .color(egui::Color32::from_rgb(180, 160, 255)),
+                    );
                 }
             });
+
+            if self.esr_run {
+                ui.add(
+                    egui::ProgressBar::new(0.35)
+                        .animate(true)
+                        .text("Upscaling..."),
+                );
+            }
         });
     }
 
