@@ -74,6 +74,8 @@ ok done , splitted the lgc.rs , it took me a lot of time , and now wow errs , i 
 
 ok fixed the bugs also named the buttons with the 1st letter in capital like apply => Apply as it looks better (does it actually? well kind of for me it looks normal)
 
+# oct 20
+
 ![](assets/02_v2.png)
 
 also after a lot of work i reakized splitting is a part of my hobby so i will split everything buhahahah , anyways the igc and ui were same file onve  `<skull emoji>` holy its 5 hrs today already???? imma gonna grind , i am on a so called family vacation where youre forced to tag so no way imma gonna waste this free time .
@@ -103,3 +105,9 @@ ok so while adding a progress bar i though i wd organize the code , last words f
 ![](assets/ah-iwannadie.png)
 
 booom ! now i wanna die , i didnt even push my last working one and i already have strippe vs code to minimal so no ~.bak taken of code  i js wanna die now 
+
+ok fixed a lot , all bugs fixed , then i started making , everything works but the progress bar never shows up , WHYYYYYYY????!!!!
+
+ok got the best idea at this dire situation , drop the processing thing , and FUCKING LET IT COOOK , it will still upscale despite no processing tag , what we are? humans not bots , right , RIGHT? so we can wait not  prob no loading screen needed also , my arch throws terminate / wait when it does the work PLZ IGNORE THT .
+
+ok done i am fucking tired , imma gonna write the readme now and sayonara 

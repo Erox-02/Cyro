@@ -170,6 +170,10 @@ pub(super) fn esrgan_current(app: &mut Cyro, ctx: &egui::Context) {
         },
         Err(err) => app.status = format!("esrgan failed ++=> {err}"),
     }
+    let (tx, rx) = std::sync::mpsc::channel();
+    app.esr_rx = Some(rx);
+    app.esr_run = true;
+    app.status = "Upscaling image...".into();
 }
 
 pub(super) fn poll_esrgan(app: &mut Cyro, ctx: &egui::Context) {
