@@ -49,10 +49,10 @@ Here are some results on upscaling :
 
 # Limits / Plan for v2
 
-> Cant open a passed photo
-> doesnt have anything else after crop and upscale
-> works only on arch
-> written realy measily
+- Cant open a passed photo
+- doesnt have anything else after crop and upscale
+- works only on arch
+- written realy measily
 
 # License 
 
