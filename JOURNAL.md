@@ -127,3 +127,8 @@ ok time for benhmark
 
 i won at last, now js the readme and i am done 
 
+ok it even works on PKGBUILD now its a full on prod 
+
+![](assets/works.png)
+
+ok done so i can now push it to phantom , ah !
