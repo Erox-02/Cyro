@@ -17,19 +17,19 @@ impl Crp {
         let image_height = image.height();
 
         if self.width == 0 || self.height == 0 {
-            return Err("Crop area cannot be empty.".into());
+            return Err("crop area cannot be empty.".into());
         }
 
         let right = self.x
             .checked_add(self.width)
-            .ok_or("Crop coordinates overflow.")?;
+            .ok_or("crop coordinates overflow.")?;
 
         let bottom = self.y
             .checked_add(self.height)
-            .ok_or("Crop coordinates overflow.")?;
+            .ok_or("crop coordinates overflow.")?;
 
         if right > image_width || bottom > image_height {
-            return Err("Crop area exceeds image boundaries.".into());
+            return Err("crop area exceeds image boundaries.".into());
         }
 
         Ok(image.crop_imm(
