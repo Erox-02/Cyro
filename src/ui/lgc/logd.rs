@@ -122,7 +122,7 @@ pub(super) fn cancel_crop(app: &mut Cyro) {
 }
 
 pub(super) fn esrgan_current(app: &mut Cyro, ctx: &egui::Context) {
-    let Some(source) = app.image.as_ref() else {
+    let Some(source) = app.img.as_ref() else {
         return;
     };
 
@@ -169,5 +169,52 @@ pub(super) fn esrgan_current(app: &mut Cyro, ctx: &egui::Context) {
             Err(err) => app.status = format!("cldnt not open output: {err}"),
         },
         Err(err) => app.status = format!("esrgan failed ++=> {err}"),
+    }
+}
+
+pub(super) fn poll_esrgan(app: &mut Cyro, ctx: &egui::Context) {
+    use std::sync::mpsc::TryRecvError;
+    let received = match app.esr_rx.as_ref() {
+        Some(rx) => match rx.try_recv() {
+            Ok(result) => Some(Some(result)),
+            Err(TryRecvError::Disconnected) => Some(None),
+            Err(TryRecvError::Empty) => None,
+        },
+        None => None,
+    };
+    match received {
+        Some(Some(Ok(path))) => {
+            app.esr_run = false;
+            app.esr_rx = None;
+            match image::open(&path) {
+                Ok(upscaled) => {
+                    let (width, height) = (upscaled.width(), upscaled.height());
+                    app.img = Some(upscaled);
+                    app.crp_mde = false;
+                    app.drg_mde = None;
+                    app.crp = crate::crp::Crp::default();
+                    refresh_texture(app, ctx);
+                    app.status = format!("Upscaled to {width} x {height} px");
+                }
+                Err(err) => {
+                    app.status = format!("Could not open esrgan output ++=> {err}");
+                }
+            }
+        }
+        Some(Some(Err(err))) => {
+            app.esr_run = false;
+            app.esr_rx = None;
+            app.status = format!("esrgan failed ++=> {err}");
+        }
+        Some(None) => {
+            app.esr_run = false;
+            app.esr_rx = None;
+            app.status = "esrgan process stopped unexpectedly.".into();
+        }
+        None => {
+            if app.esr_run {
+                ctx.request_repaint_after(std::time::Duration::from_millis(100));
+            }
+        }
     }
 }

@@ -110,6 +110,20 @@ impl Cyro {
                         .text("Upscaling..."),
                 );
             }
+
+            if self.esr_run {
+                ui.label(
+                    egui::RichText::new("✨ Upscaling your image… hold your horses 🐎")
+                        .small()
+                        .color(egui::Color32::from_rgb(180, 160, 255)),
+                );
+
+                ui.add(
+                    egui::ProgressBar::new(0.35)
+                        .animate(true)
+                        .text("Upscaling..."),
+                );
+            }
         });
     }
 
