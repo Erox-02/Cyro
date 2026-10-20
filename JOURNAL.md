@@ -97,3 +97,9 @@ finally found this brat
 ![](assets/02-up.png)
 
 ohhh now it upscales , js needa wait a lot , i think i needa add a progress bar 
+
+ok so while adding a progress bar i though i wd organize the code , last words frm many programmers and then 
+
+![](assets/ah-iwannadie.png)
+
+booom ! now i wanna die , i didnt even push my last working one and i already have strippe vs code to minimal so no ~.bak taken of code  i js wanna die now 
