@@ -24,9 +24,9 @@ pub struct Cyro {
     pub(super) crp_mde: bool,
     pub(super) esr_scle: u8,
     pub(super) esr_mdl: crate::esrgan::Model,
-    pub(super) drg_mde: Option<Dragmd>
+    pub(super) drg_mde: Option<Dragmd>,
     pub(super) drg_anc: egui::Pos2,
-    pub(super) drg_init: 
+    pub(super) drg_init: Crp,
     pub(super) esr_run: bool,
     pub(super) esr_rx: Option<
         std::sync::mpsc::Receiver<Result<std::path::PathBuf, String>>
