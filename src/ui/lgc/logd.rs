@@ -121,7 +121,11 @@ pub(super) fn cancel_crop(app: &mut Cyro) {
     app.status = "crop cancelled.".into();
 }
 
-pub(super) fn esrgan_current(app: &mut Cyro, ctx: &egui::Context) {
+pub(super) fn esrgan_current(app: &mut Cyro, _ctx: &egui::Context) {
+    if app.esr_run {
+        return;
+    }
+
     let Some(source) = app.img.as_ref() else {
         return;
     };
@@ -141,43 +145,31 @@ pub(super) fn esrgan_current(app: &mut Cyro, ctx: &egui::Context) {
         return;
     }
 
-    app.status = "upscaling.oO0".into();
+    let scale = app.esr_scle;
+    let model = app.esr_mdl.clone();
 
-    let result = crate::esrgan::upscale(
-        &input,
-        &output,
-        app.esr_scle,
-        app.esr_mdl,
-    );
-
-    let _ = std::fs::remove_file(&input);
-
-    match result {
-        Ok(path) => match image::open(&path) {
-            Ok(upscaled) => {
-                let (width, height) = (upscaled.width(), upscaled.height());
-
-                app.img = Some(upscaled);
-                app.crp_mde = false;
-                app.drg_mde = None;
-                app.crp = crate::crp::Crp::default();
-
-                refresh_texture(app, ctx);
-
-                app.status = format!("upscaled to {width} x {height} px");
-            }
-            Err(err) => app.status = format!("cldnt not open output: {err}"),
-        },
-        Err(err) => app.status = format!("esrgan failed ++=> {err}"),
-    }
     let (tx, rx) = std::sync::mpsc::channel();
+
     app.esr_rx = Some(rx);
     app.esr_run = true;
     app.status = "Upscaling image...".into();
+
+    std::thread::spawn(move || {
+        let result = crate::esrgan::upscale(
+            &input,
+            &output,
+            scale,
+            model,
+        );
+
+        let _ = std::fs::remove_file(&input);
+        let _ = tx.send(result);
+    });
 }
 
 pub(super) fn poll_esrgan(app: &mut Cyro, ctx: &egui::Context) {
     use std::sync::mpsc::TryRecvError;
+
     let received = match app.esr_rx.as_ref() {
         Some(rx) => match rx.try_recv() {
             Ok(result) => Some(Some(result)),
@@ -186,18 +178,23 @@ pub(super) fn poll_esrgan(app: &mut Cyro, ctx: &egui::Context) {
         },
         None => None,
     };
+
     match received {
         Some(Some(Ok(path))) => {
             app.esr_run = false;
             app.esr_rx = None;
+
             match image::open(&path) {
                 Ok(upscaled) => {
                     let (width, height) = (upscaled.width(), upscaled.height());
+
                     app.img = Some(upscaled);
                     app.crp_mde = false;
                     app.drg_mde = None;
                     app.crp = crate::crp::Crp::default();
+
                     refresh_texture(app, ctx);
+
                     app.status = format!("Upscaled to {width} x {height} px");
                 }
                 Err(err) => {

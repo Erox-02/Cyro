@@ -111,3 +111,18 @@ ok fixed a lot , all bugs fixed , then i started making , everything works but t
 ok got the best idea at this dire situation , drop the processing thing , and FUCKING LET IT COOOK , it will still upscale despite no processing tag , what we are? humans not bots , right , RIGHT? so we can wait not  prob no loading screen needed also , my arch throws terminate / wait when it does the work PLZ IGNORE THT .
 
 ok done i am fucking tired , imma gonna write the readme now and sayonara 
+
+i gave on my coding skills and asked gpt to fix and he was unable to do it , he js added slop and more progress bars IT FUCKING STACKED $ PROGRESS BARS , T_T i am crying 
+
+but then i saw my impl sets esr_run true only after esrgan does the work so you get a terminate/wait msg as things never load for the backend , who the hell wrote it? it was me obviously , thts why i am crying 
+ T-T  
+
+![T-T](assets/T-T.png)
+
+btw the .oO0 looks really odd , needa fix tht , okk done now it works js ignore tht one msg tht shldnt be there , i think people can ignore one wait/terminate msg right? yeah probably .
+
+ok time for benhmark
+
+![](assets/hehe.png)
+
+i won at last, now js the readme and i am done 
